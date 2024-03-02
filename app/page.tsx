@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react';
 import SuggestionBlock from '../components/SuggestionBlock/SuggestionBlock';
 import UserInput from '../components/UserInput/UserInput';
+import ChatContainer from '../components/ChatContainer/ChatContainer';
 import { Text, rem, Grid } from '@mantine/core';
 import { IconBrandMantine } from '@tabler/icons-react';
 import { AppShell, Burger, Group, Skeleton, Container } from '@mantine/core';
@@ -28,7 +30,6 @@ const DEFAULT_SUGGESTIONS: Array<Suggestion> = [
     title: "Create a charter",
     subtitle: "to start a film club",
   },
-
 ]
 
 const WelcomeMessage = () => {
@@ -43,13 +44,26 @@ const WelcomeMessage = () => {
       <Text size="xl">{MESSAGE}</Text>
     </>
   )
-
 }
+
+const InitialView = () => (
+  <>
+    <WelcomeMessage />
+    <Grid>
+      { DEFAULT_SUGGESTIONS.map((suggestion, index) => (
+        <Grid.Col span={6}>
+          <SuggestionBlock key={index} {...suggestion} />
+        </Grid.Col>
+      ))}
+    </Grid>
+  </>
+)
 
 export default function HomePage() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-
+  const [isChatStarted, setIsChatStarted] = useState(true);
+ 
   return (
     <AppShell
       header={{ height: 60 }}
@@ -77,14 +91,7 @@ export default function HomePage() {
       </AppShell.Navbar>
       <AppShell.Main>
         <Container px={0} size="45rem">
-          <WelcomeMessage />
-          <Grid>
-            { DEFAULT_SUGGESTIONS.map((suggestion, index) => (
-              <Grid.Col span={6}>
-                <SuggestionBlock key={index} {...suggestion} />
-              </Grid.Col>
-            ))}
-          </Grid>
+          {isChatStarted ? <ChatContainer /> : <InitialView />}
           <UserInput />
         </Container>
       </AppShell.Main>
