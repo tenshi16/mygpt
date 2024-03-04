@@ -27,7 +27,7 @@ Fractals are shapes that repeat themselves at smaller and smaller scales, no mat
 ]
 const ChatContainer = () => {
   return (
-    <Stack gap="xl">
+    <Stack gap="xl" style={{height: '85vh'}}>
       {
         MOCK_CHATS.map(({isGPT, name, message}, index) => (
           <ChatBubble key={index} isGPT={isGPT} name={name} message={message} /> )
