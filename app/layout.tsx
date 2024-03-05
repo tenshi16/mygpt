@@ -1,12 +1,11 @@
+'use client';
+
 import '@mantine/core/styles.css';
 import React from 'react';
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import { theme } from '../theme';
-
-export const metadata = {
-  title: 'Mantine Next.js template',
-  description: 'I am using Mantine with Next.js!',
-};
+import { store } from './store';
+import { Provider } from 'react-redux';
 
 export default function RootLayout({ children }: { children: any }) {
   return (
@@ -20,7 +19,9 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <Provider store={store}>
+          <MantineProvider theme={theme}>{children}</MantineProvider>
+        </Provider>
       </body>
     </html>
   );

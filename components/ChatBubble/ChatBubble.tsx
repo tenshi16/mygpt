@@ -2,7 +2,7 @@
 
 import { Flex, Text, rem, Grid } from '@mantine/core';
 import { IconBrandMantine } from '@tabler/icons-react';
-interface Bubble {
+export interface Bubble {
   isGPT: boolean,
   message: string,
   name: string,
