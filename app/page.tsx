@@ -4,6 +4,7 @@ import { useState } from 'react';
 import SuggestionBlock from '../components/SuggestionBlock/SuggestionBlock';
 import UserInput from '../components/UserInput/UserInput';
 import ChatContainer from '../components/ChatContainer/ChatContainer';
+import { useChat } from "ai/react";
 import { Text, rem, Grid } from '@mantine/core';
 import { IconBrandMantine } from '@tabler/icons-react';
 import { AppShell, Burger, Group, Skeleton, Container } from '@mantine/core';
@@ -63,6 +64,7 @@ export default function HomePage() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
   const [isChatStarted, setIsChatStarted] = useState(true);
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
  
   return (
     <AppShell
@@ -91,8 +93,8 @@ export default function HomePage() {
       </AppShell.Navbar>
       <AppShell.Main>
         <Container px={0} size="45rem">
-          {isChatStarted ? <ChatContainer /> : <InitialView />}
-          <UserInput />
+          {isChatStarted ? <ChatContainer messages={messages}/> : <InitialView />}
+          <UserInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
         </Container>
       </AppShell.Main>
     </AppShell>
