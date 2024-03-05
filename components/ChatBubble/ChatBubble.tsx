@@ -7,7 +7,7 @@ export interface Bubble {
   message: string,
   name: string,
 }
-const ChatBubble = ({isGPT, message, name}: Bubble) => {
+const ChatBubble = ({name, message}: Bubble) => {
   return (
     <Grid gutter="xs">
       <Grid.Col span="content">
