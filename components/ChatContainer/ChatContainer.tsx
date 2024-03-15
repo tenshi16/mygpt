@@ -1,19 +1,21 @@
 'use client';
 
 import ChatBubble from '../ChatBubble/ChatBubble';
-// import type { RootState } from '../../app/store';
-// import { useSelector } from 'react-redux';
-import { Stack } from '@mantine/core';
+import { Stack, ScrollArea } from '@mantine/core';
 
 const ChatContainer = (props: any) => {
   const messages = props.messages;
+  const viewport = props.viewport;
+
   return (
-    <Stack gap="xl" style={{height: '85vh'}}>
-      {
-       messages && messages.map((message: any) => (
-          <ChatBubble key={message.id} isGPT={message.role !== "user"}  message={message.content} name={message.role} /> )
-        )}
-    </Stack>
+    <ScrollArea scrollbarSize={8} scrollHideDelay={0} scrollbars="y" viewportRef={viewport}>
+      <Stack gap="xl" style={{height: '85vh'}}>
+        {
+          messages && messages.map((message: any) => (
+            <ChatBubble key={message.id} isGPT={message.role !== "user"}  message={message.content} name={message.role} /> )
+          )}
+      </Stack>
+    </ScrollArea>
   )
 
 }
