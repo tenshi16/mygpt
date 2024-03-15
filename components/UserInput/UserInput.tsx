@@ -3,7 +3,7 @@
 import { Input, rem } from '@mantine/core';
 import { IconSquareArrowUp } from '@tabler/icons-react';
 
-const UserInput = ({input, handleInputChange, handleSubmit}: any) => {
+const UserInput = ({input, handleInputChange, handleSubmit, scrollToBottom}: any) => {
   return (
     <>
       <form onSubmit={handleSubmit}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import SuggestionBlock from '../components/SuggestionBlock/SuggestionBlock';
 import UserInput from '../components/UserInput/UserInput';
 import ChatContainer from '../components/ChatContainer/ChatContainer';
@@ -64,8 +64,13 @@ export default function HomePage() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
   const [isChatStarted, setIsChatStarted] = useState(true);
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
- 
+  const viewport = useRef<HTMLDivElement>(null);
+  const { messages, input, handleInputChange, handleSubmit } = useChat({onFinish: () => scrollToBottom()});
+
+
+  const scrollToBottom = useCallback(() => 
+    viewport.current!.scrollTo({ top: viewport.current!.scrollHeight, behavior: 'smooth' }), [messages.length]);
+
   return (
     <AppShell
       header={{ height: 60 }}
@@ -93,8 +98,8 @@ export default function HomePage() {
       </AppShell.Navbar>
       <AppShell.Main>
         <Container px={0} size="45rem">
-          {isChatStarted ? <ChatContainer messages={messages}/> : <InitialView />}
-          <UserInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
+          {isChatStarted ? <ChatContainer messages={messages} viewport={viewport}/> : <InitialView />}
+          <UserInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} scrollToBottom={scrollToBottom} />
         </Container>
       </AppShell.Main>
     </AppShell>
