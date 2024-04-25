@@ -4,7 +4,7 @@ import { ollama, streamText } from "modelfusion";
 
 export const runtime = 'edge';
 
-export async function POST(req: Request) {
+export default async function POST(req: Request) {
   // useChat will send a JSON with a messages property:
   const { messages }: { messages: Message[] } = await req.json();
 

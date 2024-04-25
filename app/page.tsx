@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import axios from 'axios';
 import SuggestionBlock from '../components/SuggestionBlock/SuggestionBlock';
 import UserInput from '../components/UserInput/UserInput';
 import ChatContainer from '../components/ChatContainer/ChatContainer';
@@ -60,16 +61,55 @@ const InitialView = () => (
   </>
 )
 
+const fetchFile = async () => {
+  try {
+    const response = await axios.get('/api/file');
+    return response.data.messages;
+  } catch (error) {
+    console.error('Error fetching file:', error);
+  }
+};
+
+const saveFile = async (chatHistory: any) => {
+    const data = chatHistory;
+
+    try {
+      await axios.post('/api/file', data);
+      console.log('File saved successfully');
+    } catch (error) {
+      console.error('Error saving file:', error);
+    }
+  };
+
 export default function HomePage() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
   const [isChatStarted, setIsChatStarted] = useState(true);
   const viewport = useRef<HTMLDivElement>(null);
-  const { messages, input, handleInputChange, handleSubmit } = useChat({onFinish: () => scrollToBottom()});
+  const { messages, input, handleInputChange, handleSubmit, setMessages } = useChat({onFinish: () => scrollToBottom()});
 
 
-  const scrollToBottom = useCallback(() => 
-    viewport.current!.scrollTo({ top: viewport.current!.scrollHeight, behavior: 'smooth' }), [messages.length]);
+  const scrollToBottom = useCallback(() => {
+    messages && saveFile(messages);
+    viewport.current!.scrollTo({ top: viewport.current!.scrollHeight, behavior: 'smooth' })}
+    , [messages.length]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchFile();
+      if(data as any) {
+        setMessages(data as any);
+      }
+    };
+    fetchData();
+    return () => {
+      saveFile(messages);
+};
+  }, []);
+
+  /* useEffect(() => {
+    saveFile(messages);
+  }, [messages.length]); */
 
   return (
     <AppShell
